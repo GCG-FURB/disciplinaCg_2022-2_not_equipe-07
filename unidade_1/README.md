@@ -10,4 +10,8 @@ Descrição:
 
 Pontos positivos:  
 
+- SM: conceitos gerais, Etimologia, classificações e exemplos de vídeos  
+
 Pontos negativos:  
+
+- Formatos de arquivos: diversidade  
