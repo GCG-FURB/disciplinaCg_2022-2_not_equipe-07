@@ -16,9 +16,9 @@
   <PackageReference Include="OpenTK.NetCore" Version="*" />
   </ItemGroup>
 
-  <!-- <ItemGroup> [TODO:] para que serve isto?
+  <ItemGroup>
     <ProjectReference Include="..\..\CG_Biblioteca\CG_Biblioteca.csproj" />
-  </ItemGroup> -->
+  </ItemGroup>
 
   <ItemGroup>
      <Reference Include="CG_Biblioteca">
