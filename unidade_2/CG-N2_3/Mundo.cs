@@ -37,7 +37,10 @@ namespace gcgcg
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
-    private Retangulo obj_Retangulo;
+    private Circulo obj_Circulo;
+    private Circulo obj_Circulo1;
+    private Circulo obj_Circulo2;
+    private SegReta obj_SegReta;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -46,16 +49,56 @@ namespace gcgcg
     protected override void OnLoad(EventArgs e)
     {
       base.OnLoad(e);
-      camera.xmin = 0; camera.xmax = 600; camera.ymin = 0; camera.ymax = 600;
+      camera.xmin = -300; camera.xmax = 300; camera.ymin = -300; camera.ymax = 300;
 
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
+      Ponto4D p1 = new Ponto4D(0, 100, 0);
+      Ponto4D p2 = new Ponto4D(-100, -100, 0);
+      Ponto4D p3 = new Ponto4D(100, -100, 0);
+
+      //P1
       objetoId = Utilitario.charProximo(objetoId);
-      obj_Retangulo = new Retangulo(objetoId, null, new Ponto4D(50, 50, 0), new Ponto4D(150, 150, 0));
-      obj_Retangulo.ObjetoCor.CorR = 255; obj_Retangulo.ObjetoCor.CorG = 0; obj_Retangulo.ObjetoCor.CorB = 255;
-      objetosLista.Add(obj_Retangulo);
-      objetoSelecionado = obj_Retangulo;
+      obj_Circulo = new Circulo(objetoId, null, p1, 100);
+      obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
+      objetosLista.Add(obj_Circulo);
+      objetoSelecionado = obj_Circulo;
+
+      //P2
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_Circulo1 = new Circulo(objetoId, null, p2, 100);
+      obj_Circulo1.ObjetoCor.CorR = 0; obj_Circulo1.ObjetoCor.CorG = 0; obj_Circulo1.ObjetoCor.CorB = 0;
+      objetosLista.Add(obj_Circulo1);
+      objetoSelecionado = obj_Circulo1;
+
+      //P3
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_Circulo2 = new Circulo(objetoId, null, p3, 100);
+      obj_Circulo2.ObjetoCor.CorR = 0; obj_Circulo2.ObjetoCor.CorG = 0; obj_Circulo2.ObjetoCor.CorB = 0;
+      objetosLista.Add(obj_Circulo2);
+      objetoSelecionado = obj_Circulo2;
+
+      //Segmento de reta P1
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_SegReta = new SegReta(objetoId, null, p1, p2);
+      obj_SegReta.ObjetoCor.CorR = 0; obj_SegReta.ObjetoCor.CorG = 255; obj_SegReta.ObjetoCor.CorB = 255;
+      objetosLista.Add(obj_SegReta);
+      objetoSelecionado = obj_SegReta;
+
+      //Segmento de reta P2
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_SegReta = new SegReta(objetoId, null, p2, p3);
+      obj_SegReta.ObjetoCor.CorR = 0; obj_SegReta.ObjetoCor.CorG = 255; obj_SegReta.ObjetoCor.CorB = 255;
+      objetosLista.Add(obj_SegReta);
+      objetoSelecionado = obj_SegReta;
+
+      //Segmento de reta P3
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_SegReta = new SegReta(objetoId, null, p3, p1);
+      obj_SegReta.ObjetoCor.CorR = 0; obj_SegReta.ObjetoCor.CorG = 255; obj_SegReta.ObjetoCor.CorB = 255;
+      objetosLista.Add(obj_SegReta);
+      objetoSelecionado = obj_SegReta;
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -153,8 +196,8 @@ namespace gcgcg
       GL.Color3(Convert.ToByte(0), Convert.ToByte(255), Convert.ToByte(0));
       GL.Vertex3(0, 0, 0); GL.Vertex3(0, 200, 0);
       // GL.Color3(0.0f,0.0f,1.0f);
-      GL.Color3(Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(255));
-      GL.Vertex3(0, 0, 0); GL.Vertex3(0, 0, 200);
+      //GL.Color3(Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(255));
+      //L.Vertex3(0, 0, 0); GL.Vertex3(0, 0, 200);
       GL.End();
 #endif
     }
@@ -165,7 +208,7 @@ namespace gcgcg
     static void Main(string[] args)
     {
       Mundo window = Mundo.GetInstance(600, 600);
-      window.Title = "CG_N2";
+      window.Title = "CG_N2_1";
       window.Run(1.0 / 60.0);
     }
   }
