@@ -2,11 +2,8 @@
   Autor: Dalton Solano dos Reis
 **/
 
-//#define CG_Privado // código do professor.
-#define CG_Gizmo  // debugar gráfico.
-#define CG_Debug // debugar texto.
-#define CG_OpenGL // render OpenGL.
-//#define CG_DirectX // render DirectX.
+#define CG_Gizmo
+// #define CG_Privado
 
 using System;
 using OpenTK;
@@ -37,7 +34,16 @@ namespace gcgcg
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
-    private Retangulo obj_Retangulo;
+    private Retangulo obj_Retangulo;    
+
+    private List<Ponto4D> listaPontos = new List<Ponto4D>();
+    private PrimitiveType[] listaPrimitivos = {PrimitiveType.Points, PrimitiveType.Lines, PrimitiveType.LineLoop, PrimitiveType.LineStrip, 
+                                               PrimitiveType.Triangles, PrimitiveType.TriangleStrip, PrimitiveType.TriangleFan, PrimitiveType.Quads, 
+                                               PrimitiveType.QuadStrip, PrimitiveType.Polygon};
+    private int index = 0;
+    
+    Ponto4D ponto;
+
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -46,16 +52,25 @@ namespace gcgcg
     protected override void OnLoad(EventArgs e)
     {
       base.OnLoad(e);
-      camera.xmin = 0; camera.xmax = 600; camera.ymin = 0; camera.ymax = 600;
+      camera.xmin = -400; camera.xmax = 400; camera.ymin = -400; camera.ymax = 400;
 
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      objetoId = Utilitario.charProximo(objetoId);
-      obj_Retangulo = new Retangulo(objetoId, null, new Ponto4D(50, 50, 0), new Ponto4D(150, 150, 0));
-      obj_Retangulo.ObjetoCor.CorR = 255; obj_Retangulo.ObjetoCor.CorG = 0; obj_Retangulo.ObjetoCor.CorB = 255;
-      objetosLista.Add(obj_Retangulo);
-      objetoSelecionado = obj_Retangulo;
+      // objetoId = Utilitario.charProximo(objetoId);
+      // obj_Retangulo = new Retangulo(objetoId, null, new Ponto4D(-200, -200), new Ponto4D(200, 200));
+      // obj_Retangulo.ObjetoCor.CorR = 0; obj_Retangulo.ObjetoCor.CorG = 0; obj_Retangulo.ObjetoCor.CorB = 0;
+      // obj_Retangulo.PrimitivaTipo = teste[index];
+      // obj_Retangulo.PrimitivaTamanho = 7;
+      // objetosLista.Add(obj_Retangulo);
+      // objetoSelecionado = obj_Retangulo;
+
+      Ponto4D pontoA = new Ponto4D(-200, -200);
+
+      listaPontos.Add(pontoA);
+      listaPontos.Add(new Ponto4D(-200, 200));
+      listaPontos.Add(new Ponto4D(200, 200));
+      listaPontos.Add(new Ponto4D(200, -200));
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -67,41 +82,53 @@ namespace gcgcg
       objetoId = Utilitario.charProximo(objetoId);
       obj_Circulo = new Privado_Circulo(objetoId, null, new Ponto4D(100, 300), 50);
       obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 255; obj_Circulo.ObjetoCor.CorB = 255;
-      obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
-      obj_Circulo.PrimitivaTamanho = 5;
       objetosLista.Add(obj_Circulo);
       objetoSelecionado = obj_Circulo;
 #endif
-#if CG_OpenGL
       GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-#endif
     }
     protected override void OnUpdateFrame(FrameEventArgs e)
     {
       base.OnUpdateFrame(e);
-#if CG_OpenGL
       GL.MatrixMode(MatrixMode.Projection);
       GL.LoadIdentity();
+
+      // objetoSelecionado.PrimitivaTipo = listaPrimitivos[index];
+
+      
+
       GL.Ortho(camera.xmin, camera.xmax, camera.ymin, camera.ymax, camera.zmin, camera.zmax);
-#endif
     }
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       base.OnRenderFrame(e);
-#if CG_OpenGL
       GL.Clear(ClearBufferMask.ColorBufferBit);
       GL.MatrixMode(MatrixMode.Modelview);
       GL.LoadIdentity();
-#endif
 #if CG_Gizmo      
       Sru3D();
 #endif
+      GL.PointSize(10);
+      GL.LineWidth(10);
+      GL.Begin(listaPrimitivos[index]);
+        
+        GL.Color3(Convert.ToByte(0), Convert.ToByte(255), Convert.ToByte(255));
+        GL.Vertex2(listaPontos[0].X, listaPontos[0].Y);
+
+        GL.Color3(Convert.ToByte(255), Convert.ToByte(113), Convert.ToByte(181));
+        GL.Vertex2(listaPontos[1].X, listaPontos[1].Y);
+
+        GL.Color3(Convert.ToByte(255), Convert.ToByte(255), Convert.ToByte(50));
+        GL.Vertex2(listaPontos[2].X, listaPontos[2].Y);
+
+        GL.Color3(Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(0));
+        GL.Vertex2(listaPontos[3].X, listaPontos[3].Y);
+      GL.End();
+
       for (var i = 0; i < objetosLista.Count; i++)
         objetosLista[i].Desenhar();
-#if CG_Gizmo
       if (bBoxDesenhar && (objetoSelecionado != null))
         objetoSelecionado.BBox.Desenhar();
-#endif
       this.SwapBuffers();
     }
 
@@ -119,12 +146,14 @@ namespace gcgcg
           Console.WriteLine(objetosLista[i]);
         }
       }
-#if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
-#endif
       else if (e.Key == Key.V)
         mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto
+
+      else if (e.Key == Key.Space)
+        index = (index + 1) % listaPrimitivos.Length;
+
       else
         Console.WriteLine(" __ Tecla não implementada.");
     }
@@ -143,7 +172,6 @@ namespace gcgcg
 #if CG_Gizmo
     private void Sru3D()
     {
-#if CG_OpenGL
       GL.LineWidth(1);
       GL.Begin(PrimitiveType.Lines);
       // GL.Color3(1.0f,0.0f,0.0f);
@@ -156,7 +184,6 @@ namespace gcgcg
       GL.Color3(Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(255));
       GL.Vertex3(0, 0, 0); GL.Vertex3(0, 0, 200);
       GL.End();
-#endif
     }
 #endif    
   }

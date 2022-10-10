@@ -111,19 +111,19 @@ namespace gcgcg
     protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
     {
       if (e.Key == Key.D){
-        camera.PanDireita();
+        camera.PanEsquerda();
         Console.WriteLine("DIREITA");
       }
       if (e.Key == Key.E){
-        camera.PanEsquerda();
+        camera.PanDireita();
         Console.WriteLine("ESQUERDA");
       }
       if (e.Key == Key.B){
-        camera.PanBaixo();
+        camera.PanCima();
         Console.WriteLine("BAIXO");
       }
       if (e.Key == Key.C){
-        camera.PanCima();
+        camera.PanBaixo();
         Console.WriteLine("CIMA");
       }
       if (e.Key == Key.I){

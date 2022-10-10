@@ -23,22 +23,15 @@ namespace gcgcg
 
     protected override void DesenharObjeto()
     {
-#if CG_OpenGL && !CG_DirectX
       GL.Begin(base.PrimitivaTipo);
       foreach (Ponto4D pto in pontosLista)
       {
         GL.Vertex2(pto.X, pto.Y);
       }
       GL.End();
-#elif CG_DirectX && !CG_OpenGL
-    Console.WriteLine(" .. Coloque aqui o seu código em DirectX");
-#elif (CG_DirectX && CG_OpenGL) || (!CG_DirectX && !CG_OpenGL)
-    Console.WriteLine(" .. ERRO de Render - escolha OpenGL ou DirectX !!");
-#endif
     }
     
     //TODO: melhorar para exibir não só a lista de pontos (geometria), mas também a topologia ... poderia ser listado estilo OBJ da Wavefrom
-#if CG_Debug
     public override string ToString()
     {
       string retorno;
@@ -49,7 +42,5 @@ namespace gcgcg
       }
       return (retorno);
     }
-#endif
-
   }
 }
