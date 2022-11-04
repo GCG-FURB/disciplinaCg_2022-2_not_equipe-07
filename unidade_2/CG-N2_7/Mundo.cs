@@ -46,14 +46,14 @@ namespace gcgcg
         private Ponto4D ptoSup;
         private Ponto4D ptoSelecionado;
 
-        public bool dentro_quadrado(Retangulo obj_Retangulo, Ponto4D ponto)
+        public bool dentroQuadrado(Retangulo obj_Retangulo, Ponto4D ponto)
         {
             return (ponto.X <= obj_Retangulo.BBox.obterMenorX ||
                     ponto.X >= obj_Retangulo.BBox.obterMaiorX ||
                     ponto.Y <= obj_Retangulo.BBox.obterMenorY ||
                     ponto.Y >= obj_Retangulo.BBox.obterMaiorY);
         }
-        public bool dentro_circulo(Circulo obj_Circulo, Ponto4D ponto, double raio)
+        public bool dentroCirculo(Circulo obj_Circulo, Ponto4D ponto, double raio)
         {
             double dist = Math.Sqrt(Math.Pow(obj_Circulo.BBox.obterCentro.X - ponto.X, 2) +
                                     Math.Pow(obj_Circulo.BBox.obterCentro.Y - ponto.Y, 2));
@@ -135,11 +135,11 @@ namespace gcgcg
 
             obj_Retangulo.BBox.Desenhar();
 
-            if (dentro_quadrado(obj_Retangulo, obj_CirculoPequeno.BBox.obterCentro))
+            if (dentroQuadrado(obj_Retangulo, obj_CirculoPequeno.BBox.obterCentro))
             {
                 obj_Retangulo.ObjetoCor.CorR = 255; obj_Retangulo.ObjetoCor.CorG = 255; obj_Retangulo.ObjetoCor.CorB = 0;
 
-                if (!dentro_circulo(obj_CirculoGrande, obj_CirculoPequeno.BBox.obterCentro, 200))
+                if (!dentroCirculo(obj_CirculoGrande, obj_CirculoPequeno.BBox.obterCentro, 200))
                 {
                     obj_Retangulo.ObjetoCor.CorR = 0; obj_Retangulo.ObjetoCor.CorG = 255; obj_Retangulo.ObjetoCor.CorB = 255;
                 }
