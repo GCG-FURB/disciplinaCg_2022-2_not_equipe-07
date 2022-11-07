@@ -52,11 +52,10 @@ namespace gcgcg
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
       objetoId = Utilitario.charProximo(objetoId);
-      obj_SrPalito = new SrPalito(objetoId, null, 100, 45);
-      obj_SrPalito.ObjetoCor.CorR = 0; obj_SrPalito.ObjetoCor.CorG = 0; obj_SrPalito.ObjetoCor.CorB = 0;
+       obj_SrPalito = new SrPalito(objetoId, null, 100, 45);
+      obj_SrPalito.ObjetoCor.CorR = 255; obj_SrPalito.ObjetoCor.CorG = 0; obj_SrPalito.ObjetoCor.CorB = 255;
       objetosLista.Add(obj_SrPalito);
       objetoSelecionado = obj_SrPalito;
-
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
       obj_SegReta = new Privado_SegReta(objetoId, null, new Ponto4D(50, 150), new Ponto4D(150, 250));
@@ -119,24 +118,6 @@ namespace gcgcg
           Console.WriteLine(objetosLista[i]);
         }
       }
-      else if (e.Key == Key.Q)
-        obj_SrPalito.MoverEsquerda();
-
-      else if (e.Key == Key.W)
-        obj_SrPalito.MoverDireita();
-
-      else if (e.Key == Key.A)
-        obj_SrPalito.DiminuirRaio();
-
-      else if (e.Key == Key.S)
-        obj_SrPalito.AumentarRaio();
-
-      else if (e.Key == Key.Z)
-        obj_SrPalito.DiminuirAngulo();
-
-      else if (e.Key == Key.X)
-        obj_SrPalito.AumentarAngulo();
-        
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
@@ -182,6 +163,7 @@ namespace gcgcg
   {
     static void Main(string[] args)
     {
+      ToolkitOptions.Default.EnableHighResolution = false;
       Mundo window = Mundo.GetInstance(600, 600);
       window.Title = "CG_N2";
       window.Run(1.0 / 60.0);
