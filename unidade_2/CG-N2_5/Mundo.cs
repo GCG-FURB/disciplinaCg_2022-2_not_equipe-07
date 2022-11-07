@@ -37,7 +37,7 @@ namespace gcgcg
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
-    private Retangulo obj_Retangulo;
+    private SrPalito obj_SrPalito;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -46,16 +46,16 @@ namespace gcgcg
     protected override void OnLoad(EventArgs e)
     {
       base.OnLoad(e);
-      camera.xmin = 0; camera.xmax = 600; camera.ymin = 0; camera.ymax = 600;
+      camera.xmin = -300; camera.xmax = 300; camera.ymin = -300; camera.ymax = 300;
 
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
       objetoId = Utilitario.charProximo(objetoId);
-      obj_Retangulo = new Retangulo(objetoId, null, new Ponto4D(50, 50, 0), new Ponto4D(150, 150, 0));
-      obj_Retangulo.ObjetoCor.CorR = 255; obj_Retangulo.ObjetoCor.CorG = 0; obj_Retangulo.ObjetoCor.CorB = 255;
-      objetosLista.Add(obj_Retangulo);
-      objetoSelecionado = obj_Retangulo;
+      obj_SrPalito = new SrPalito(objetoId, null, 100, 45);
+      obj_SrPalito.ObjetoCor.CorR = 0; obj_SrPalito.ObjetoCor.CorG = 0; obj_SrPalito.ObjetoCor.CorB = 0;
+      objetosLista.Add(obj_SrPalito);
+      objetoSelecionado = obj_SrPalito;
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -119,6 +119,24 @@ namespace gcgcg
           Console.WriteLine(objetosLista[i]);
         }
       }
+      else if (e.Key == Key.Q)
+        obj_SrPalito.MoverEsquerda();
+
+      else if (e.Key == Key.W)
+        obj_SrPalito.MoverDireita();
+
+      else if (e.Key == Key.A)
+        obj_SrPalito.DiminuirRaio();
+
+      else if (e.Key == Key.S)
+        obj_SrPalito.AumentarRaio();
+
+      else if (e.Key == Key.Z)
+        obj_SrPalito.DiminuirAngulo();
+
+      else if (e.Key == Key.X)
+        obj_SrPalito.AumentarAngulo();
+        
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
@@ -144,7 +162,7 @@ namespace gcgcg
     private void Sru3D()
     {
 #if CG_OpenGL
-      GL.LineWidth(1);
+      GL.LineWidth(2);
       GL.Begin(PrimitiveType.Lines);
       // GL.Color3(1.0f,0.0f,0.0f);
       GL.Color3(Convert.ToByte(255), Convert.ToByte(0), Convert.ToByte(0));

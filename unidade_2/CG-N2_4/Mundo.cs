@@ -36,7 +36,7 @@ namespace gcgcg
     private bool mouseMoverPto = false;
     private Retangulo obj_Retangulo;    
 
-    private List<Ponto4D> listaPontos = new List<Ponto4D>();
+    private List<Ponto4D> listaDePontos = new List<Ponto4D>();
     private PrimitiveType[] listaPrimitivos = {PrimitiveType.Points, PrimitiveType.Lines, PrimitiveType.LineLoop, PrimitiveType.LineStrip, 
                                                PrimitiveType.Triangles, PrimitiveType.TriangleStrip, PrimitiveType.TriangleFan, PrimitiveType.Quads, 
                                                PrimitiveType.QuadStrip, PrimitiveType.Polygon};
@@ -67,10 +67,10 @@ namespace gcgcg
 
       Ponto4D pontoA = new Ponto4D(-200, -200);
 
-      listaPontos.Add(pontoA);
-      listaPontos.Add(new Ponto4D(-200, 200));
-      listaPontos.Add(new Ponto4D(200, 200));
-      listaPontos.Add(new Ponto4D(200, -200));
+      listaDePontos.Add(pontoA);
+      listaDePontos.Add(new Ponto4D(-200, 200));
+      listaDePontos.Add(new Ponto4D(200, 200));
+      listaDePontos.Add(new Ponto4D(200, -200));
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -113,16 +113,16 @@ namespace gcgcg
       GL.Begin(listaPrimitivos[index]);
         
         GL.Color3(Convert.ToByte(0), Convert.ToByte(255), Convert.ToByte(255));
-        GL.Vertex2(listaPontos[0].X, listaPontos[0].Y);
+        GL.Vertex2(listaDePontos[0].X, listaDePontos[0].Y);
 
         GL.Color3(Convert.ToByte(255), Convert.ToByte(113), Convert.ToByte(181));
-        GL.Vertex2(listaPontos[1].X, listaPontos[1].Y);
+        GL.Vertex2(listaDePontos[1].X, listaDePontos[1].Y);
 
         GL.Color3(Convert.ToByte(255), Convert.ToByte(255), Convert.ToByte(50));
-        GL.Vertex2(listaPontos[2].X, listaPontos[2].Y);
+        GL.Vertex2(listaDePontos[2].X, listaDePontos[2].Y);
 
         GL.Color3(Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(0));
-        GL.Vertex2(listaPontos[3].X, listaPontos[3].Y);
+        GL.Vertex2(listaDePontos[3].X, listaDePontos[3].Y);
       GL.End();
 
       for (var i = 0; i < objetosLista.Count; i++)
@@ -192,7 +192,7 @@ namespace gcgcg
     static void Main(string[] args)
     {
       Mundo window = Mundo.GetInstance(600, 600);
-      window.Title = "CG_N2";
+      window.Title = "CG_N2_4";
       window.Run(1.0 / 60.0);
     }
   }
