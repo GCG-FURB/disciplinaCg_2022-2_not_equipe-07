@@ -1,0 +1,8 @@
+@startuml
+abstract class Poligono {
+    + Poligono(rotulo:char, paiRef:Objeto)
+    + <<override>> ToString() : string
+    + DesenharObjeto() : void
+}
+ObjetoGeometria <|-- Poligono
+@enduml
