@@ -53,6 +53,9 @@ namespace gcgcg
       GL.PopMatrix();                                     // N3-Exe14: grafo de cena
     }
     protected abstract void DesenharGeometria();
+    public List<Objeto> Filhos(){
+      return this.objetosLista;
+    }
     public void FilhoAdicionar(Objeto filho)
     {
       this.objetosLista.Add(filho);

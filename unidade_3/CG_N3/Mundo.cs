@@ -29,7 +29,8 @@ namespace gcgcg
     private char objetoId = '@';
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
-    private Poligono objetoNovo = null;
+    private Poligono obj_Poligno = null;
+    private bool estaSelecionado = true;
 #if CG_Privado
     private Retangulo obj_Retangulo;
     private Privado_SegReta obj_SegReta;
@@ -44,15 +45,15 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      objetoId = Utilitario.charProximo(objetoId);
-      objetoNovo = new Poligono(objetoId, null);
-      objetosLista.Add(objetoNovo);
-      objetoNovo.PontosAdicionar(new Ponto4D( 50,  50));
-      objetoNovo.PontosAdicionar(new Ponto4D(350,  50));
-      objetoNovo.PontosAdicionar(new Ponto4D(350, 350));
-      objetoNovo.PontosAdicionar(new Ponto4D( 50, 350));
-      objetoSelecionado = objetoNovo;
-      objetoNovo = null;
+      /*objetoId = Utilitario.charProximo(objetoId);
+      obj_Poligno = new Poligono(objetoId, null);
+      objetosLista.Add(obj_Poligno);
+      obj_Poligno.PontosAdicionar(new Ponto4D( 50,  50));
+      obj_Poligno.PontosAdicionar(new Ponto4D(350,  50));
+      obj_Poligno.PontosAdicionar(new Ponto4D(350, 350));
+      obj_Poligno.PontosAdicionar(new Ponto4D( 50, 350));
+      objetoSelecionado = obj_Poligno;
+      obj_Poligno = null;*/
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -101,10 +102,13 @@ namespace gcgcg
 
     protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
     {
+      //Lista ajuda no console
       if (e.Key == Key.H)
         Utilitario.AjudaTeclado();
       else if (e.Key == Key.Escape)
         Exit();
+      
+      //Lista Polígonos e Vértices
       else if (e.Key == Key.E)
       {
         Console.WriteLine("--- Objetos / Pontos: ");
@@ -113,29 +117,82 @@ namespace gcgcg
           Console.WriteLine(objetosLista[i]);
         }
       }
+
+      //Exibe BBox do Objeto Selecionado
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
-      else if (e.Key == Key.Enter)
-      {
-        if (objetoNovo != null)
-        {
-          objetoNovo.PontosRemoverUltimo();   // N3-Exe6: "truque" para deixar o rastro
-          objetoSelecionado = objetoNovo;
-          objetoNovo = null;
+
+      //Alteração de Cores formato RGB
+       else if (e.Key == Key.R && objetoSelecionado != null) {
+        objetoSelecionado.ObjetoCor.CorR = 255; objetoSelecionado.ObjetoCor.CorG = 0; objetoSelecionado.ObjetoCor.CorB = 0;
+      }
+      else if (e.Key == Key.G && objetoSelecionado != null) {
+        objetoSelecionado.ObjetoCor.CorR = 0; objetoSelecionado.ObjetoCor.CorG = 255; objetoSelecionado.ObjetoCor.CorB = 0;
+      }
+      else if (e.Key == Key.B && objetoSelecionado != null) {
+        objetoSelecionado.ObjetoCor.CorR = 0; objetoSelecionado.ObjetoCor.CorG = 0; objetoSelecionado.ObjetoCor.CorB = 255;
+      }
+
+      //Remover Polígono
+      else if(e.Key == Key.C && objetoSelecionado != null){
+        for (var i = 0; i < objetosLista.Count; i++){
+          if(objetosLista[i].Equals(objetoSelecionado)){
+            objetosLista.Remove(objetoSelecionado);
+            Console.WriteLine("Objeto Apagado /n" + objetoSelecionado.ToString());
+            objetoSelecionado = null;
+            estaSelecionado = true;
+          }
+          else {
+            List<Objeto> filhos = objetosLista[i].Filhos();
+            if(filhos != null){
+              for (int j=0; j < filhos.Count; j++){
+                if(filhos[j] == objetoSelecionado){
+                  objetosLista[j].FilhoRemover(filhos[j]);
+                  Console.WriteLine("Objeto Filho Apagado /n" + objetoSelecionado.ToString());
+                  objetoSelecionado = null;
+                }
+              }
+            }
+          }
         }
       }
-      else if (e.Key == Key.Space)
+
+      //Termina adição e mover pontos, desseleciona polígono
+      else if (e.Key == Key.Enter)
       {
-        if (objetoNovo == null)
+        if (obj_Poligno != null)
         {
-          objetoId = Utilitario.charProximo(objetoId);
-          objetoNovo = new Poligono(objetoId, null);
-          objetosLista.Add(objetoNovo);
-          objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));
-          objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));  // N3-Exe6: "troque" para deixar o rastro
+          obj_Poligno.PontosRemoverUltimo();   // N3-Exe6: "truque" para deixar o rastro
+          objetoSelecionado = obj_Poligno;
+          obj_Poligno = null;
+          
         }
-        else
-          objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+        estaSelecionado = true;
+        Console.WriteLine("Terminado objeto: " + objetoSelecionado.ToString());
+      }
+
+      //Adicionar Vértices ao Polígono
+      else if (e.Key == Key.Space){
+        Console.WriteLine("Status:" + estaSelecionado);
+        if(estaSelecionado == true){
+          objetoId = Utilitario.charProximo(objetoId);
+          obj_Poligno =  new Poligono(objetoId, null);
+          obj_Poligno.PrimitivaTipo = PrimitiveType.LineLoop;
+          obj_Poligno.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+          obj_Poligno.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+          obj_Poligno.ObjetoCor.CorR = 255; obj_Poligno.ObjetoCor.CorG = 255; obj_Poligno.ObjetoCor.CorB = 255;
+          if(objetoSelecionado != null){
+            objetoSelecionado.FilhoAdicionar(obj_Poligno);
+          }else{
+            objetosLista.Add(obj_Poligno);
+          }
+          objetoSelecionado = obj_Poligno;
+          estaSelecionado = false;
+        } else {
+          objetoSelecionado.PontosRemoverUltimo();
+          objetoSelecionado.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+          objetoSelecionado.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+        }
       }
       else if (objetoSelecionado != null)
       {
@@ -183,10 +240,10 @@ namespace gcgcg
     protected override void OnMouseMove(MouseMoveEventArgs e)
     {
       mouseX = e.Position.X; mouseY = 600 - e.Position.Y; // Inverti eixo Y
-      if (objetoNovo != null)
+      if (obj_Poligno != null)
       {
-        objetoNovo.PontosUltimo().X = mouseX;
-        objetoNovo.PontosUltimo().Y = mouseY;
+        obj_Poligno.PontosUltimo().X = mouseX;
+        obj_Poligno.PontosUltimo().Y = mouseY;
       }
     }
 
