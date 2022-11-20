@@ -115,6 +115,14 @@ namespace gcgcg
         for (var i = 0; i < objetosLista.Count; i++)
         {
           Console.WriteLine(objetosLista[i]);
+          List<Objeto> filhos = objetosLista[i].Filhos();
+          if(filhos != null){
+            foreach (ObjetoGeometria objetoFilho in filhos){
+              if(objetoFilho == objetoSelecionado){
+                Console.WriteLine(objetoFilho);
+              }
+            }
+          }
         }
       }
 
@@ -124,13 +132,19 @@ namespace gcgcg
 
       //Alteração de Cores formato RGB
        else if (e.Key == Key.R && objetoSelecionado != null) {
-        objetoSelecionado.ObjetoCor.CorR = 255; objetoSelecionado.ObjetoCor.CorG = 0; objetoSelecionado.ObjetoCor.CorB = 0;
+        objetoSelecionado.ObjetoCor.CorR = 255;
+        objetoSelecionado.ObjetoCor.CorG = 0;
+        objetoSelecionado.ObjetoCor.CorB = 0;
       }
       else if (e.Key == Key.G && objetoSelecionado != null) {
-        objetoSelecionado.ObjetoCor.CorR = 0; objetoSelecionado.ObjetoCor.CorG = 255; objetoSelecionado.ObjetoCor.CorB = 0;
+        objetoSelecionado.ObjetoCor.CorR = 0;
+        objetoSelecionado.ObjetoCor.CorG = 255;
+        objetoSelecionado.ObjetoCor.CorB = 0;
       }
       else if (e.Key == Key.B && objetoSelecionado != null) {
-        objetoSelecionado.ObjetoCor.CorR = 0; objetoSelecionado.ObjetoCor.CorG = 0; objetoSelecionado.ObjetoCor.CorB = 255;
+        objetoSelecionado.ObjetoCor.CorR = 0;
+        objetoSelecionado.ObjetoCor.CorG = 0;
+        objetoSelecionado.ObjetoCor.CorB = 255;
       }
 
       //Remover Polígono
@@ -171,9 +185,27 @@ namespace gcgcg
         Console.WriteLine("Terminado objeto: " + objetoSelecionado.ToString());
       }
 
+      //Move o vértice do polígono selecionado que estiver mais perto do mouse.
+      else if (e.Key == Key.V && objetoSelecionado != null){
+          objetoSelecionado.moverComandoV(new Ponto4D(mouseX, mouseY));
+      }
+
+      //Remove o vértice do polígono selecionado que estiver mais perto do mouse.
+      else if(e.Key == Key.D && objetoSelecionado != null){
+        objetoSelecionado.removerComandoD(new Ponto4D(mouseX,mouseY));
+      }
+
+      //Alterna entre aberto e fechado o polígono selecionado.
+      else if (e.Key == Key.S && objetoSelecionado != null){
+        if(objetoSelecionado.PrimitivaTipo == PrimitiveType.LineLoop){
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.LineStrip;
+        } else {
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
+        }
+      }
+
       //Adicionar Vértices ao Polígono
       else if (e.Key == Key.Space){
-        Console.WriteLine("Status:" + estaSelecionado);
         if(estaSelecionado == true){
           objetoId = Utilitario.charProximo(objetoId);
           obj_Poligno =  new Poligono(objetoId, null);
@@ -194,6 +226,7 @@ namespace gcgcg
           objetoSelecionado.PontosAdicionar(new Ponto4D(mouseX, mouseY));
         }
       }
+
       else if (objetoSelecionado != null)
       {
         if (e.Key == Key.M)
@@ -228,7 +261,7 @@ namespace gcgcg
         else if (e.Key == Key.Number4)
           objetoSelecionado.RotacaoZBBox(-10);
         else if (e.Key == Key.Number9)
-          objetoSelecionado = null;                     // desmacar objeto selecionado
+          objetoSelecionado = null;                     // desmarcar objeto selecionado
         else
           Console.WriteLine(" __ Tecla não implementada.");
       }

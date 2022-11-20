@@ -133,5 +133,11 @@ namespace gcgcg
 
       matriz = matriz.MultiplicarMatriz(matrizGlobal);
     }
+    public bool VerificaEstaDentroBBox(Ponto4D pto){
+      if(pto.X <= BBox.obterMaiorX && pto.X >= BBox.obterMenorX && pto.Y <= BBox.obterMaiorY && pto.Y >= BBox.obterMenorY){
+        return true;
+      }            
+      return false;                                                                                            
+    }
   }
 }
