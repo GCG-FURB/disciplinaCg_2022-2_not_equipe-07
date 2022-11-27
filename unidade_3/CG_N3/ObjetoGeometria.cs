@@ -78,6 +78,45 @@ namespace gcgcg
       return distance;  
     }
 
+    public double ScanlineIntesec(double y, double y1, double y2){
+      return (y - y1) / (y2-y1);
+    }
+
+    public double ScanlineCalcularXi(double x1, double x2, double t){
+      return (x1 + (x2-x1) * t);
+    }
+
+    public bool ScanLine(Ponto4D pontoMouse){
+      return ScanLine(pontoMouse, pontosLista);
+    }
+
+    public bool ScanLine(Ponto4D pontoMouse, List<Ponto4D> listaPontos){
+      int numeroInterseccoes = 0;
+      bool estaDentro = true;
+      for (int i = 0; i < listaPontos.Count; i++){
+        Ponto4D ponto1 = listaPontos[i];
+        int num = (i+1)%listaPontos.Count;
+        Console.Write("Numero identificado:"+num);
+        Ponto4D ponto2 = listaPontos[num];
+        
+        if(ponto1.Y == ponto2.Y){
+          if(pontoMouse.Y == ponto1.Y && pontoMouse.X > Math.Min(ponto1.X, ponto2.X) && pontoMouse.X < Math.Max(ponto1.X, ponto2.X)){
+            return estaDentro;
+          }
+        }
+
+        double t = ScanlineIntesec(pontoMouse.Y, ponto1.Y, ponto2.Y);
+
+        if(t >= 0 && t <= 1){
+          double x = ScanlineCalcularXi(ponto1.X, ponto2.X, t);
+          if(x > pontoMouse.X && pontoMouse.Y > Math.Min(ponto1.Y, ponto2.Y) && pontoMouse.Y < Math.Max(ponto1.Y, ponto2.Y)){
+            numeroInterseccoes++;
+          }
+        }
+      }
+      return numeroInterseccoes%2==1;
+    }
+
     public override string ToString()
     {
       string retorno;
