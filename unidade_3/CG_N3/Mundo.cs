@@ -231,26 +231,28 @@ namespace gcgcg
       else if (e.Key == Key.A){
         Ponto4D mouse = new Ponto4D(mouseX, mouseY);
         bool dentroFilho = false;
-        bool dentroPai = false; 
+        bool dentroPai = false;
         foreach (ObjetoGeometria objeto in this.objetosLista){
           List<Objeto> filhos = objeto.Filhos();
           Console.Write("Traz todos os filhos:" + filhos.ToString());
           if(filhos != null){
             foreach (ObjetoGeometria objetoFilho in filhos){
-              objetoFilho.VerificaEstaDentroBBox(mouse);//objeto
-              dentroFilho = objetoFilho.ScanLine(new Ponto4D(mouseX, mouseY));//obejto geometria
-              if(dentroFilho == true){
-                objetoSelecionado = objetoFilho;
+              if (objetoFilho.VerificaEstaDentroBBox(mouse)){ //objeto
+                dentroFilho = objetoFilho.ScanLine(new Ponto4D(mouseX, mouseY)); //obejto geometria
+                if(dentroFilho == true){
+                  objetoSelecionado = objetoFilho;
+                }
               }
             }
           }
-          objeto.VerificaEstaDentroBBox(mouse);
-          dentroPai = objeto.ScanLine(new Ponto4D(mouseX, mouseY));
-          if(dentroPai == true){
-            objetoSelecionado = objeto;
-          }
-          if(dentroPai == false && dentroFilho == false){
-            objetoSelecionado = null;
+          if (objeto.VerificaEstaDentroBBox(mouse)){
+            dentroPai = objeto.ScanLine(new Ponto4D(mouseX, mouseY));
+            if(dentroPai == true){
+              objetoSelecionado = objeto;
+            }
+            if(dentroPai == false && dentroFilho == false){
+              objetoSelecionado = null;
+            }
           }
         }
       }

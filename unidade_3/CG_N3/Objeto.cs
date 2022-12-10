@@ -73,6 +73,14 @@ namespace gcgcg
       Transformacao4D matrizTranslate = new Transformacao4D();
       matrizTranslate.AtribuirTranslacao(tx, ty, tz);
       matriz = matrizTranslate.MultiplicarMatriz(matriz);
+      TranslacaoXYZBBox(tx, ty, tz);
+    }
+    public void TranslacaoXYZBBox(double tx, double ty, double tz)
+    {
+      Ponto4D pontoPivo = bBox.obterCentro;
+      matrizTmpTranslacao.AtribuirTranslacao(tx, ty, tz);
+      matrizGlobal = matrizTmpTranslacao.MultiplicarMatriz(matrizGlobal);
+      BBox.Atualizar(pontoPivo);
     }
     public void EscalaXYZ(double Sx, double Sy, double Sz)
     {
@@ -96,6 +104,7 @@ namespace gcgcg
       matrizGlobal = matrizTmpTranslacaoInversa.MultiplicarMatriz(matrizGlobal);
 
       matriz = matriz.MultiplicarMatriz(matrizGlobal);
+      BBox.Atualizar(pontoPivo);
     }
     public void RotacaoEixo(double angulo)
     {
