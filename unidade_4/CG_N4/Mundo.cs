@@ -60,30 +60,6 @@ namespace gcgcg
       GL.Enable(EnableCap.DepthTest);
       GL.Enable(EnableCap.CullFace);
 
-
-#if CG_Privado  //FIXME: arrumar os outros objetos
-      objetoId = Utilitario.charProximo(objetoId);
-      obj_Cilindro = new Cilindro(objetoId, null);
-      obj_Cilindro.ObjetoCor.CorR = 177; obj_Cilindro.ObjetoCor.CorG = 166; obj_Cilindro.ObjetoCor.CorB = 136;
-      objetosLista.Add(obj_Cilindro);
-      obj_Cilindro.Translacao(2, 'x');
-
-      objetoId = Utilitario.charProximo(objetoId);
-      obj_Esfera = new Esfera(objetoId, null);
-      obj_Esfera.ObjetoCor.CorR = 177; obj_Esfera.ObjetoCor.CorG = 166; obj_Esfera.ObjetoCor.CorB = 136;
-      objetosLista.Add(obj_Esfera);
-      obj_Esfera.Translacao(4, 'x');
-
-      objetoId = Utilitario.charProximo(objetoId);
-      obj_Cone = new Cone(objetoId, null);
-      obj_Cone.ObjetoCor.CorR = 177; obj_Cone.ObjetoCor.CorG = 166; obj_Cone.ObjetoCor.CorB = 136;
-      objetosLista.Add(obj_Cone);
-      obj_Cone.Translacao(6, 'x');
-#endif
-
-      GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-      GL.Enable(EnableCap.DepthTest);
-      GL.Enable(EnableCap.CullFace);
     }
     protected override void OnResize(EventArgs e)
     {

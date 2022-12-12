@@ -59,7 +59,7 @@ namespace gcgcg
                 for (var y = 0; y < 8; y++)
                 {
                     var isEspacoPreto = (y % 2 == 0 && x % 2 == 0) || (y % 2 == 1 && x % 2 == 1);
-                    var corCasa = isEspacoPreto ? new Cor(0, 0, 0) : new Cor(200, 200, 200);
+                    var corCasa = isEspacoPreto ? new Cor(0, 0, 0) : new Cor(255, 255, 255);
 
                     var pontoCentroCasa = new Ponto4D(xAtual, yBase, zAtual);
 
@@ -88,7 +88,7 @@ namespace gcgcg
             var centroPeca = new Ponto4D(centroCasa.X, centroCasa.Y + alturaCasa, centroCasa.Z);
 
             var pecaJogadorUm = posY <= 2;
-            var cor = pecaJogadorUm ? new Cor() : new Cor(255, 0, 0);
+            var cor = pecaJogadorUm ? new Cor(0, 0, 255) : new Cor(255, 0, 0);
             var pecaNova = new Peca(posX, posY, tamanhoCasa * 0.7, alturaCasa / 5, centroPeca, Utilitario.charProximo('@'), this)
             {
                 ObjetoCor = cor,

@@ -246,10 +246,6 @@ namespace gcgcg
                 _tabuleiro.FilhoRemover(pecaMorta);
             }
 
-            if (SeletorY == Limite || SeletorY == 0)
-            {
-                pecaSelecionada.TornarRainha();
-            }
         }
 
         private void GerarSeletor()
