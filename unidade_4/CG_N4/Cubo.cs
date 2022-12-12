@@ -6,17 +6,42 @@ namespace gcgcg
   internal class Cubo : ObjetoGeometria
   {
     private bool exibeVetorNormal = false;
-    public Cubo(char rotulo, Objeto paiRef) : base(rotulo, paiRef)
-    {      
-      base.PontosAdicionar(new Ponto4D(-0.5, -0.5, 0.5)); // PtoA listaPto[0]
-      base.PontosAdicionar(new Ponto4D(0.5, -0.5, 0.5)); // PtoB listaPto[1]
-      base.PontosAdicionar(new Ponto4D(0.5, 0.5, 0.5)); // PtoC listaPto[2]
-      base.PontosAdicionar(new Ponto4D(-0.5, 0.5, 0.5)); // PtoD listaPto[3]
-      base.PontosAdicionar(new Ponto4D(-0.5, -0.5, -0.5)); // PtoE listaPto[4]
-      base.PontosAdicionar(new Ponto4D(0.5, -0.5, -0.5)); // PtoF listaPto[5]
-      base.PontosAdicionar(new Ponto4D(0.5, 0.5, -0.5)); // PtoG listaPto[6]
-      base.PontosAdicionar(new Ponto4D(-0.5, 0.5, -0.5)); // PtoH listaPto[7]
-    }
+    private double _tamanho;
+        private double _altura;
+
+        public Cubo(Ponto4D pontoCentro, double tamanho, double altura, char rotulo, Objeto paiRef) : base(rotulo, paiRef)
+        {
+            _tamanho = tamanho;
+            _altura = altura;
+
+            GerarPontos(pontoCentro);
+        }
+
+        private void GerarPontos(Ponto4D pontoCentro)
+        {
+            PontosRemoverTodos();
+
+            var minX = pontoCentro.X - _tamanho;
+            var maxX = pontoCentro.X + _tamanho;
+            var minY = pontoCentro.Y - _altura;
+            var maxY = pontoCentro.Y + _altura;
+            var minZ = pontoCentro.Z - _tamanho;
+            var maxZ = pontoCentro.Z + _tamanho;
+
+            PontosAdicionar(new Ponto4D(minX, minY, maxZ)); // [0] 
+            PontosAdicionar(new Ponto4D(maxX, minY, maxZ)); // [1] 
+            PontosAdicionar(new Ponto4D(maxX, maxY, maxZ)); // [2] 
+            PontosAdicionar(new Ponto4D(minX, maxY, maxZ)); // [3] 
+            PontosAdicionar(new Ponto4D(minX, minY, minZ)); // [4] 
+            PontosAdicionar(new Ponto4D(maxX, minY, minZ)); // [5] 
+            PontosAdicionar(new Ponto4D(maxX, maxY, minZ)); // [6] 
+            PontosAdicionar(new Ponto4D(minX, maxY, minZ)); // [7] 
+        }
+
+        public void MoverPara(Ponto4D pontoMover)
+        {
+            GerarPontos(pontoMover);
+        }
     
     protected override void DesenharObjeto()
     {       // Sentido anti-horário

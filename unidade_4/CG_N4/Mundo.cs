@@ -32,6 +32,8 @@ namespace gcgcg
     private float deslocamento = 0;
     private bool bBoxDesenhar = false;
 
+    private DamaController controller;
+
 #if CG_Privado
     private Cilindro obj_Cilindro;
     private Esfera obj_Esfera;
@@ -47,9 +49,17 @@ namespace gcgcg
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
       objetoId = Utilitario.charProximo(objetoId);
-      obj_Cubo = new Cubo(objetoId, null);
-      objetosLista.Add(obj_Cubo);
-      objetoSelecionado = obj_Cubo;
+      var tabuleiro = new Tabuleiro(new Ponto4D(0, 0, 0), 5, 1, objetoId, null);
+      objetosLista.Add(tabuleiro);
+      objetoSelecionado = tabuleiro;
+
+      controller = new DamaController(tabuleiro);
+      objetosLista.Add(controller.Seletor);
+
+      GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+      GL.Enable(EnableCap.DepthTest);
+      GL.Enable(EnableCap.CullFace);
+
 
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
@@ -80,7 +90,7 @@ namespace gcgcg
       base.OnResize(e);
 
       GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
-
+      camera.Eye = new Vector3(15, 15, 0);
       Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(camera.Fovy, Width / (float)Height, camera.Near, camera.Far);
       GL.MatrixMode(MatrixMode.Projection);
       GL.LoadMatrix(ref projection);
@@ -94,6 +104,7 @@ namespace gcgcg
     {
       base.OnRenderFrame(e);
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+      
       Matrix4 modelview = Matrix4.LookAt(camera.Eye, camera.At, camera.Up);
       GL.MatrixMode(MatrixMode.Modelview);
       GL.LoadMatrix(ref modelview);
@@ -133,6 +144,7 @@ namespace gcgcg
       else if (e.Key == Key.Plus) deslocamento++;
       else if (e.Key == Key.C) menuSelecao = "[menu] C: Câmera";
       else if (e.Key == Key.O) menuSelecao = "[menu] O: Objeto";
+      else if (controller != null && controller.HandleEntrada(e.Key)) { }
 
       // Menu: seleção
       else if (menuSelecao.Equals("[menu] C: Câmera")) camera.MenuTecla(e.Key, menuEixoSelecao, deslocamento);
